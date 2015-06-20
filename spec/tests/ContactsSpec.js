@@ -3,7 +3,7 @@ describe("Contacts Test Suite", function(){
 
 	//var request = require('request');
 	var request = require('C:/Program Files/nodejs/node_modules/npm/node_modules/request')
-	var base_url = "http://mycontactsvc.com:3000";
+	var base_url = "http://localhost:3000";
 	var contacts_url = base_url + "/contacts";
 
 	describe("hello world", function(){
@@ -11,10 +11,8 @@ describe("Contacts Test Suite", function(){
 		it("hello world",function(done){
 		    
 		    request.get(base_url, function(error, response, body){
-
 				expect(response.statusCode).toBe(200);
 				//expect(body).toBe("Hello World");
-
 				done();
 		    });
 		});
@@ -23,6 +21,7 @@ describe("Contacts Test Suite", function(){
 
 	describe("create update contact", function(){
 		var idCreated;
+        var msgIdCreated;
 
 		it("should create contact",function(done){
 
@@ -31,16 +30,17 @@ describe("Contacts Test Suite", function(){
 			contact.lastName = "peri";
 			contact.phone = "23002300";
 
-			console.log(JSON.stringify(contact));
+			//console.log(JSON.stringify(contact));
 		    
 		    request.post({url: contacts_url,
 		    			  body: contact,
 		    			  json: true
 		    			}, 
 		    		    function(error, response, body){
-
+                            //console.log(response.status);
 							expect(response.statusCode).toBe(200);
 							console.log(body);
+                            //console.log(response.statusCode);
 							idCreated = body;
 							done();
 					    });
@@ -55,7 +55,7 @@ describe("Contacts Test Suite", function(){
 		    		    function(error, response, body){
 
 							expect(response.statusCode).toBe(200);
-							console.log(body);
+							//console.log(idCreated);
 							expect(body.firstName).toBe("jagan");
 							done();
 					    });
@@ -78,24 +78,43 @@ describe("Contacts Test Suite", function(){
 							done();
 					    });
 		});
-	});
-
-	//TODO: Fill out the test case below that posts a message to a contact
+    //TODO: Fill out the test case below that posts a message to a contact
 	// and retrieves it back.
-	describe("post and get message to contact", function(){
+//	describe("post and get message to contact", function(){
 
-		it("should post message to contact", function(done){
-			//TODO: Write your test case here.
+		it("should create msg for contact",function(done){
+
+			var msg = new Object();
+			msg.text = "Watching Movie with MissionRnD fellows";
+		    
+		    request.post({url: contacts_url + "/" + idCreated,
+		    			  body: msg,
+		    			  json: true
+		    			}, function(error, response, body){
+                           
+							expect(response.statusCode).toBe(200);
+							//console.log(body);
+                            //console.log(response.statusCode);
+							msgIdCreated = body;						
 			done();
 
-		});
+        });
+    });
 
-		it("should get message for contact", function(done){
-			//TODO: Write your test case here.
+			it("should retrieve message",function(done){
+
+			request.get({
+							url: contacts_url + "/" + idCreated+"/"+msgIdCreated,
+							json: true
+						},
+		    		    function(error, response, body){
+
+							expect(response.statusCode).toBe(200);
+							//console.log(idCreated);
+							expect(body.text).toBe("Watching Movie with MissionRnD fellows");
 			done();
 
-		});
-
-	});
-
+		  });
+	   });
+    });
 });

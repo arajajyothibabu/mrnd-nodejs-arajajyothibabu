@@ -13,10 +13,10 @@ describe("HttpIntro Test Suite", function(){
     		 timeout: 5000}, 
     		 function(error, response, body){
 
-			// console.log(response);
-			expect(response.statusCode).toBe(200);
-			expect(response.statusMessage).toBe('OK');
-			expect(response.headers["content-type"]).toBe("text/html");
+			 //console.log(response.status);
+			expect(response.statusCode).toBe(404);
+			expect(response.statusMessage).toBe('Not Found');
+			expect(response.headers["content-type"]).toBe("text/html; charset=UTF-8");
 
 			done();
     	});
@@ -32,10 +32,10 @@ describe("HttpIntro Test Suite", function(){
 	    		 timeout: 30000}, 
 	    		 function(error, response, body){
 
-				// console.log(response);
-				expect(response.statusCode).toBe(404);
-				expect(response.statusMessage).toBe('Not Found');
-				expect(response.headers["content-type"]).toBe("text/html; charset=UTF-8");
+				 //console.log(response.status);
+				expect(response.statusCode).toBe(400);
+				expect(response.statusMessage).toBe('Bad Request');
+				expect(response.headers["content-type"]).toBe("application/json;charset=utf-8");
 
 				done();
 	    });
@@ -52,9 +52,9 @@ describe("HttpIntro Test Suite", function(){
 	    		 function(error, response, body){
 
 				// console.log(response);
-				expect(response.statusCode).toBe(404);
-				expect(response.statusMessage).toBe('Not Found');
-				expect(response.headers["content-type"]).toBe("text/html; charset=UTF-8");
+				expect(response.statusCode).toBe(200);
+				expect(response.statusMessage).toBe('OK');
+				expect(response.headers["content-type"]).toBe("application/json; charset=utf-8");
 
 				done();
 	    });
@@ -69,7 +69,7 @@ describe("HttpIntro Test Suite", function(){
 	    		{url: "http://api.openweathermap.org/data/2.5/weather?q=hyderabad",
 	    		proxy: "http://10.4.8.204:8080",
 	    		 timeout: 30000,
-	    		  json: false}, 
+	    		  json: true}, 
 	    		 function(error, response, body){
 
 				//console.log(response);
@@ -80,16 +80,20 @@ describe("HttpIntro Test Suite", function(){
 	});
 
 	 it("Weather-xml",function(done){
-	    
+	       var parseString = require("xml2js").parseString;
 	    	request.get(
 	    		{url: "http://api.openweathermap.org/data/2.5/weather?q=hyderabad&mode=xml",
 	    		proxy: "http://10.4.8.204:8080",
 	    		 timeout: 30000,
-	    		  json: true}, 
+	    		  json: false}, 
 	    		 function(error, response, body){
 
-				// console.log(response);
-				//expect(body.sys.country).toBe("IN");
+				 //console.log(response);
+                     parseString(body, function(err, result){
+                         body = result; 
+                     });
+                     
+				expect(body.current.city[0].country[0]).toBe("IN");
 
 				done();
 		    });
