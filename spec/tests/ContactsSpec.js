@@ -37,10 +37,7 @@ describe("Contacts Test Suite", function(){
 		    			  json: true
 		    			}, 
 		    		    function(error, response, body){
-                            //console.log(response.status);
 							expect(response.statusCode).toBe(200);
-							console.log(body);
-                            //console.log(response.statusCode);
 							idCreated = body;
 							done();
 					    });
@@ -53,9 +50,7 @@ describe("Contacts Test Suite", function(){
 							json: true
 						},
 		    		    function(error, response, body){
-
 							expect(response.statusCode).toBe(200);
-							//console.log(idCreated);
 							expect(body.firstName).toBe("jagan");
 							done();
 					    });
@@ -72,7 +67,6 @@ describe("Contacts Test Suite", function(){
 		    		    function(error, response, body){
 
 							expect(response.statusCode).toBe(200);
-							console.log(body);
 							expect(body.firstName).toBe("jagan-updated");
 							expect(body.phone).toBe("23002300");
 							done();
@@ -91,10 +85,7 @@ describe("Contacts Test Suite", function(){
 		    			  body: msg,
 		    			  json: true
 		    			}, function(error, response, body){
-                           
 							expect(response.statusCode).toBe(200);
-							//console.log(body);
-                            //console.log(response.statusCode);
 							msgIdCreated = body;						
 			done();
 
@@ -108,9 +99,7 @@ describe("Contacts Test Suite", function(){
 							json: true
 						},
 		    		    function(error, response, body){
-
 							expect(response.statusCode).toBe(200);
-							//console.log(idCreated);
 							expect(body.text).toBe("Watching Movie with MissionRnD fellows");
 			done();
 
